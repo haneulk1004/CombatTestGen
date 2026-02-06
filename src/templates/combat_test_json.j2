@@ -1,0 +1,20 @@
+{
+  "test_cases": [
+    {% for case in cases %}
+    {
+      "name": "{{ case.name }}",
+      "description": "{{ case.description }}",
+      "input": {
+        "damage": {{ case.input_damage }},
+        "enemy_hp": {{ case.input_hp }}
+      },
+      "expected": {
+        "hp": {{ case.expected_hp }},
+        "is_dead": {{ case.is_death|lower }},
+        "is_critical": {{ case.is_critical|lower }},
+        "is_dodge": {{ case.is_dodge|lower }}
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}

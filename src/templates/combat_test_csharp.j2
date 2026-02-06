@@ -1,0 +1,34 @@
+using System.Collections;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace Tests
+{
+    public class CombatTests
+    {
+        {% for case in cases %}
+        [Test]
+        [Description("{{ case.description }}")]
+        public void {{ case.name }}()
+        {
+            // GIVEN
+            var enemy = new EnemyCharacter();
+            enemy.HP = {{ case.input_hp }};
+            var player = new PlayerCharacter();
+            int damage = {{ case.input_damage }};
+
+            // WHEN
+            enemy.TakeDamage(damage);
+
+            // THEN
+            Assert.AreEqual({{ case.expected_hp }}, enemy.HP, "HP should match expected value");
+            {% if case.is_death %}
+            Assert.IsTrue(enemy.IsDead, "Enemy should be dead");
+            {% else %}
+            Assert.IsFalse(enemy.IsDead, "Enemy should be alive");
+            {% endif %}
+        }
+        {% endfor %}
+    }
+}

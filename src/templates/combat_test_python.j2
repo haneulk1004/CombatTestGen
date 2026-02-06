@@ -1,0 +1,26 @@
+import unittest
+
+class CombatTests(unittest.TestCase):
+    {% for case in cases %}
+    def {{ case.name.lower() }}(self):
+        """{{ case.description }}"""
+        # GIVEN
+        enemy_hp = {{ case.input_hp }}
+        damage = {{ case.input_damage }}
+        
+        # WHEN
+        # Simulated combat logic
+        final_hp = max(0, enemy_hp - damage)
+        is_dead = final_hp == 0
+        
+        # THEN
+        self.assertEqual(final_hp, {{ case.expected_hp }}, "HP should match expected value")
+        {% if case.is_death %}
+        self.assertTrue(is_dead, "Enemy should be dead")
+        {% else %}
+        self.assertFalse(is_dead, "Enemy should be alive")
+        {% endif %}
+    {% endfor %}
+
+if __name__ == '__main__':
+    unittest.main()
